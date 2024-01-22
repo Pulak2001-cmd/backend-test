@@ -18,6 +18,7 @@ import {
   getUserById,
   updateUserRoleService,
 } from "../services/userService";
+import {RequestApi} from '../types/custom'
 
 require("dotenv").config();
 
@@ -152,7 +153,7 @@ export const loginUser = catchAsyncError(
 
 //logout user
 export const logoutUser = catchAsyncError(
-  async (req: Request, res: Response, next: NextFunction) => {
+  async (req: RequestApi, res: Response, next: NextFunction) => {
     try {
       res.cookie("access_token", "", {
         maxAge: 1,
@@ -177,7 +178,7 @@ export const logoutUser = catchAsyncError(
 
 //update access token
 export const updateAccessToken = catchAsyncError(
-  async (req: Request, res: Response, next: NextFunction) => {
+  async (req: RequestApi, res: Response, next: NextFunction) => {
     try {
       const refresh_token = req.cookies.refresh_token as string;
       const decoded = jwt.verify(
@@ -218,7 +219,7 @@ export const updateAccessToken = catchAsyncError(
 );
 // get user credentials
 export const getUserCredentials = catchAsyncError(
-  async (req: Request, res: Response, next: NextFunction) => {
+  async (req: RequestApi, res: Response, next: NextFunction) => {
     try {
       const userId = req.user?._id || "";
       // const user = await userModel.findById(userId);
@@ -241,7 +242,7 @@ interface ISocialAuthBody {
 
 //social auth
 export const socialAuth = catchAsyncError(
-  async (req: Request, res: Response, next: NextFunction) => {
+  async (req: RequestApi, res: Response, next: NextFunction) => {
     try {
       const { name, email, avatar } = req.body as ISocialAuthBody;
       const user = await userModel.findOne({ email: email });
@@ -263,7 +264,7 @@ interface IUpdateUserBody {
   email: string;
 }
 export const updateUserInfo = catchAsyncError(
-  async (req: Request, res: Response, next: NextFunction) => {
+  async (req: RequestApi, res: Response, next: NextFunction) => {
     try {
       const { name, email } = req.body as IUpdateUserBody;
       const userId = req.user?._id || "";
@@ -300,7 +301,7 @@ interface IUpdateUserPassword {
 }
 
 export const updateUserPassword = catchAsyncError(
-  async (req: Request, res: Response, next: NextFunction) => {
+  async (req: RequestApi, res: Response, next: NextFunction) => {
     try {
       const { oldPassword, newPassword } = req.body as IUpdateUserPassword;
       if (!oldPassword || !newPassword) {
@@ -401,7 +402,7 @@ export const updateUserRole = catchAsyncError(
 //delete user --- only for admin
 
 export const deleteUser = catchAsyncError(
-  async (req: Request, res: Response, next: NextFunction) => {
+  async (req: RequestApi, res: Response, next: NextFunction) => {
     try {
       const { id } = req.params;
       const user = await userModel.findById(id);

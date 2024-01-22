@@ -4,8 +4,13 @@ import { IUser } from "../models/userModel";
 
 declare global {
   namespace Express {
-    interface Request {
+    export interface RequestApi {
       user?: Record<string, any>;
     }
   }
+}
+
+
+export interface RequestApi extends Request {
+  user?: Record<string, any>
 }
